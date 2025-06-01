@@ -23,13 +23,17 @@ function Navbar() {
             {usuario ? (
               <>
                 <li className="nav-item">
-                  <span className="nav-link">👋 Hola, {usuario.nombre}</span>
+                  <span className="nav-link">Hola, {usuario.nombre}</span>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/perfil">👤 Mi perfil</Link>
+                  <Link className="nav-link" to="/publicar">Publicar</Link>
+                </li>
+                
+                <li className="nav-item">
+                  <Link className="nav-link" to="/perfil">Mi perfil</Link>
                 </li>
                 <li className="nav-item">
-                  <button className="btn btn-link nav-link" onClick={logout}>🔓 Cerrar sesión</button>
+                  <button className="btn btn-link nav-link" onClick={logout}>Cerrar sesión</button>
                 </li>
               </>
             ) : (
@@ -50,4 +54,5 @@ function Navbar() {
 }
 
 export default Navbar;
+
 

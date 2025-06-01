@@ -1,6 +1,11 @@
-import { useParams } from 'react-router-dom';
+
+import { useParams, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom'; // necesario para el botón de login
+
+
+
 
 const publicacionesSimuladas = [
   {
@@ -77,8 +82,11 @@ const publicacionesSimuladas = [
   }
 ];
 
+
+
 function Detalle() {
   const { id } = useParams();
+  const location = useLocation(); // 👈 necesario para saber desde dónde vino el usuario
   const publicacion = publicacionesSimuladas.find(p => p.id === parseInt(id));
   const { usuario } = useAuth();
   const [mensaje, setMensaje] = useState('');
@@ -143,13 +151,20 @@ function Detalle() {
         </>
       ) : (
         <div className="alert alert-warning">
-          Debes <a href="/login" className="alert-link">iniciar sesión</a> para contactar al vendedor.
+          Debes{' '}
+          <Link
+            to={`/login?redirect=${encodeURIComponent(location.pathname)}`}
+            className="alert-link"
+          >
+            iniciar sesión
+          </Link>{' '}
+          para contactar al vendedor.
         </div>
-
       )}
     </div>
   );
 }
 
 export default Detalle;
+
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Login() {
@@ -8,6 +8,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Usamos useLocation para leer parámetros de URL
+  const location = useLocation();
+
+  // Extraemos el parámetro redirect si existe, o '/' como fallback
+  const params = new URLSearchParams(location.search);
+  const redirectPath = params.get('redirect') || '/';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +27,9 @@ function Login() {
     };
 
     login(usuarioSimulado);
-    navigate('/');
+
+    // Redirigir a la ruta pasada en redirectPath
+    navigate(redirectPath);
   };
 
   return (
