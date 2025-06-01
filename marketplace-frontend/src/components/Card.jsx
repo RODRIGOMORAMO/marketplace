@@ -1,4 +1,6 @@
-function Card({ titulo, descripcion, precio, imagen }) {
+import { Link } from "react-router-dom";
+
+function Card({ id, titulo, descripcion, precio, imagen }) {
   return (
     <div className="col-md-4 mb-4">
       <div className="card h-100 shadow-sm">
@@ -7,7 +9,7 @@ function Card({ titulo, descripcion, precio, imagen }) {
           <h5 className="card-title">{titulo}</h5>
           <p className="card-text text-muted">{descripcion}</p>
           <p className="fw-bold">${precio}</p>
-          <button className="btn btn-primary w-100">Ver detalle</button>
+          <Link to={`/detalle/${id}`} className="btn btn-primary w-100">Ver detalle</Link>
         </div>
       </div>
     </div>
@@ -15,3 +17,4 @@ function Card({ titulo, descripcion, precio, imagen }) {
 }
 
 export default Card;
+
