@@ -1,7 +1,7 @@
 // Recibe la solicitud y llama al modelo. lógica que se usará en las rutas para registrar y loguear usuarios.
 import bcrypt from 'bcrypt';
 import { crearUsuario, buscarUsuarioPorEmail } from "../models/usuariosModel.js";
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const generarToken = (usuario) => {
   return jwt.sign({ id: usuario.id, email: usuario.email }, process.env.JWT_SECRET, {
