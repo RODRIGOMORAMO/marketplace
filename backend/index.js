@@ -28,6 +28,12 @@ app.get("/db-test", async (req, res) => {
   }
 });
 
+// Ruta raíz
+app.get("/", (req, res) => {
+  res.send("Backend del Marketplace está funcionando correctamente.");
+});
+
+
 // Solo escucha si no estás en modo test
 if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 3000;

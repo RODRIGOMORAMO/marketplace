@@ -88,12 +88,3 @@ export const borrarPublicacion = async (id, usuario_id) => {
     throw new Error("No autorizado o publicación no encontrada");
   }
 };
-
-const recargarPublicaciones = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/publicaciones`);
-    setPublicaciones(res.data);
-  } catch (error) {
-    console.error("Error al recargar publicaciones:", error);
-  }
-};

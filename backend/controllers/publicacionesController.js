@@ -112,12 +112,5 @@ const agregarPublicacion = async (nuevaPublicacion, token) => {
   }
 };
 
-const recargarPublicaciones = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/publicaciones`);
-    setPublicaciones(res.data);
-  } catch (error) {
-    console.error("Error al recargar publicaciones:", error);
-  }
-};
+
 
