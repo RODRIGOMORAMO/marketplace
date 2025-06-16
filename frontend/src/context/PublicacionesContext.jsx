@@ -21,23 +21,20 @@ const PublicacionesProvider = ({ children }) => {
   }, []);
 
   // Agregar una nueva publicación enviándola al backend
-  const agregarPublicacion = async (nuevaPublicacion, token) => {
+  const agregarPublicacion = async (publicacion, token) => {
     try {
-      const res = await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/publicaciones`,
-        nuevaPublicacion,
+        publicacion,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Enviar el token en el encabezado
           },
         }
       );
-      const nueva = res.data; // Asegúrate de que el backend devuelve la publicación creada
-      setPublicaciones((prev) => [nueva, ...prev]); // Agrega la nueva publicación al estado global
-      return nueva;
+      console.log("Publicación agregada:", response.data);
     } catch (error) {
       console.error("Error al agregar publicación:", error);
-      throw error;
     }
   };
 

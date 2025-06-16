@@ -1,7 +1,13 @@
 // Recibe la solicitud y llama al modelo. lógica que se usará en las rutas para registrar y loguear usuarios.
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
 import { crearUsuario, buscarUsuarioPorEmail } from "../models/usuariosModel.js";
+const jwt = require("jsonwebtoken");
+
+const generarToken = (usuario) => {
+  return jwt.sign({ id: usuario.id, email: usuario.email }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+};
 
 export const registrarUsuario = async (req, res) => {
     try {
@@ -50,11 +56,7 @@ export const loginUsuario = async (req, res) => {
         return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign(
-        { id: usuario.id },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-    );
+    const token = generarToken(usuario);
 
     res.status(200).json({
         message: 'Usuario autenticado exitosamente',

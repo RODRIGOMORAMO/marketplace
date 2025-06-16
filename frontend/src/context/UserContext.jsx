@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 // 1. Crear el contexto
 export const UserContext = createContext();
@@ -21,6 +22,19 @@ const UserProvider = ({ children }) => {
     setUsuario(null);
   };
 
+  const iniciarSesion = async (credenciales) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/login`,
+        credenciales
+      );
+      const token = response.data.token;
+      localStorage.setItem("token", token); // Almacenar el token
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+    }
+  };
+
   useEffect(() => {
     if (usuario) {
       localStorage.setItem("usuario", JSON.stringify(usuario));
@@ -30,7 +44,7 @@ const UserProvider = ({ children }) => {
   }, [usuario]);
 
   return (
-    <UserContext.Provider value={{ usuario, login, logout }}>
+    <UserContext.Provider value={{ usuario, login, logout, iniciarSesion }}>
       {children}
     </UserContext.Provider>
   );
