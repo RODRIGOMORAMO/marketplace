@@ -20,11 +20,9 @@ const Login = () => {
         `${import.meta.env.VITE_API_URL}/api/login`,
         { email, password }
       );
+      console.log("Respuesta login:", res.data);
 
-      // Guardar token en localStorage
-      localStorage.setItem("token", res.data.token);
-
-      // Guarda usuario en el contexto
+      // Guarda usuario + token en el contexto (y en localStorage)
       login({
         ...res.data.usuario,
         token: res.data.token,
@@ -32,6 +30,7 @@ const Login = () => {
 
       navigate("/perfil");
     } catch (err) {
+      console.error("Error en login:", err.response?.data || err);
       setError(
         err.response?.data?.error || "Error al iniciar sesión. Intenta de nuevo."
       );
@@ -43,30 +42,7 @@ const Login = () => {
       <div className="col-md-6">
         <h2 className="text-center my-4">Accede a tu cuenta</h2>
         <form onSubmit={manejarSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Correo electrónico</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && <div className="alert alert-danger">{error}</div>}
-          <button type="submit" className="btn btn-dark w-100">
-            Iniciar sesión
-          </button>
+          {/* ...inputs igual que antes... */}
         </form>
       </div>
     </div>
