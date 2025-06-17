@@ -20,11 +20,16 @@ const Login = () => {
         `${import.meta.env.VITE_API_URL}/api/login`,
         { email, password }
       );
-      // Guarda usuario y token en el contexto
+
+      // Guardar token en localStorage
+      localStorage.setItem("token", res.data.token);
+
+      // Guarda usuario en el contexto
       login({
         ...res.data.usuario,
         token: res.data.token,
       });
+
       navigate("/perfil");
     } catch (err) {
       setError(

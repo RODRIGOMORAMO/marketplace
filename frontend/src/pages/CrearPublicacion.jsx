@@ -2,8 +2,8 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { PublicacionesContext } from "../context/PublicacionesContext";
+import axios from "axios";
 
-// Simula tus categorías (deberías traerlas del backend)
 const categorias = [
   { id: 1, nombre: "Artes visuales" },
   { id: 2, nombre: "Artes plásticas" },
@@ -12,12 +12,12 @@ const categorias = [
 
 const CrearPublicacion = () => {
   const { usuario } = useContext(UserContext);
-  const { agregarPublicacion, setPublicaciones } = useContext(PublicacionesContext);
+  const { setPublicaciones } = useContext(PublicacionesContext);
   const navigate = useNavigate();
 
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [categoriaId, setCategoriaId] = useState(1); // Por defecto la primera
+  const [categoriaId, setCategoriaId] = useState(1);
   const [imagen, setImagen] = useState("");
   const [precio, setPrecio] = useState("");
   const [error, setError] = useState("");
@@ -32,18 +32,25 @@ const CrearPublicacion = () => {
     setError("");
 
     try {
-      const res = await agregarPublicacion(
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/publicaciones`,
         {
           titulo,
           descripcion,
           categoria_id: categoriaId,
           imagen_url: imagen,
-          precio: Number(precio)
+          precio: Number(precio),
         },
-        usuario.token
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      const nueva = res.data;
-      setPublicaciones(prev => [nueva, ...prev]); // <-- Agrega la nueva publicación
+
+      setPublicaciones((prev) => [res.data, ...prev]);
       alert("¡Publicación creada!");
       setTitulo("");
       setDescripcion("");
@@ -126,4 +133,3 @@ const CrearPublicacion = () => {
 };
 
 export default CrearPublicacion;
-
