@@ -6,42 +6,63 @@ export const UserContext = createContext();
 
 // 2. Proveedor de contexto
 const UserProvider = ({ children }) => {
-  // Inicializa el usuario desde localStorage
-  const [usuario, setUsuario] = useState(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
-  });
+  const [usuario, setUsuario] = useState(null);
 
-  // Función para iniciar sesión (guarda usuario y token)
+  // Recuperar usuario y token desde localStorage al iniciar la app
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    const tokenGuardado = localStorage.getItem("token");
+
+    if (usuarioGuardado && tokenGuardado) {
+      setUsuario({
+        ...JSON.parse(usuarioGuardado),
+        token: tokenGuardado,
+      });
+    }
+  }, []);
+
+  // Guardar o limpiar localStorage cuando cambia el usuario
+  useEffect(() => {
+    if (usuario) {
+      localStorage.setItem("usuario", JSON.stringify(usuario));
+      localStorage.setItem("token", usuario.token);
+    } else {
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("token");
+    }
+  }, [usuario]);
+
+  // Función para iniciar sesión (guardar usuario y token)
   const login = (datos) => {
     setUsuario(datos);
+    localStorage.setItem("usuario", JSON.stringify(datos));
+    localStorage.setItem("token", datos.token);
   };
 
   // Función para cerrar sesión
   const logout = () => {
     setUsuario(null);
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("token");
   };
 
+  // Login desde backend si se usa directamente aquí (opcional)
   const iniciarSesion = async (credenciales) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/login`,
         credenciales
       );
-      const token = response.data.token;
-      localStorage.setItem("token", token); // Almacenar el token
+      const datos = {
+        ...response.data.usuario,
+        token: response.data.token,
+      };
+      login(datos); // usamos login para setear todo
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+      throw error;
     }
   };
-
-  useEffect(() => {
-    if (usuario) {
-      localStorage.setItem("usuario", JSON.stringify(usuario));
-    } else {
-      localStorage.removeItem("usuario");
-    }
-  }, [usuario]);
 
   return (
     <UserContext.Provider value={{ usuario, login, logout, iniciarSesion }}>
