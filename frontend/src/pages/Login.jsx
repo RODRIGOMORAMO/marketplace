@@ -42,7 +42,30 @@ const Login = () => {
       <div className="col-md-6">
         <h2 className="text-center my-4">Accede a tu cuenta</h2>
         <form onSubmit={manejarSubmit}>
-          {/* ...inputs igual que antes... */}
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && <div className="alert alert-danger">{error}</div>}
+          <button type="submit" className="btn btn-primary w-100">
+            Ingresar
+          </button>
         </form>
       </div>
     </div>
