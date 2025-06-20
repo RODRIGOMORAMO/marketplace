@@ -4,25 +4,20 @@ import { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
 // 2. Proveedor de contexto
-const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
-    const tokenGuardado = localStorage.getItem("token");
-
-    if (usuarioGuardado && tokenGuardado) {
-      setUsuario({
-        ...JSON.parse(usuarioGuardado),
-        token: tokenGuardado,
-      });
+    if (usuarioGuardado) {
+      setUsuario(JSON.parse(usuarioGuardado));
     }
   }, []);
 
-  const login = (datos) => {
-    setUsuario(datos);
-    localStorage.setItem("usuario", JSON.stringify(datos));
-    localStorage.setItem("token", datos.token);
+  const login = (usuario) => {
+    setUsuario(usuario);
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    localStorage.setItem("token", usuario.token);
   };
 
   const logout = () => {
@@ -37,5 +32,3 @@ const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
-export default UserProvider;
