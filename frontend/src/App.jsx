@@ -7,17 +7,10 @@ import Registro from "./pages/Registro";
 import CrearPublicacion from "./pages/CrearPublicacion";
 import Detalle from "./pages/Detalle";
 import Perfil from "./pages/Perfil";
-import Editar from "./pages/Editar"; // Importa el componente Editar
-import { useState } from "react";
+import Editar from "./pages/Editar";
 
 function App() {
-  const [usuario, setUsuario] = useState(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
-  });
-
   return (
-    // 🟢 Requerimiento 2: Uso de React Router
     <Router>
       <div className="app-wrapper">
         <Navbar />
@@ -30,7 +23,7 @@ function App() {
             <Route path="/crear" element={<CrearPublicacion />} />
             <Route path="/detalle/:id" element={<Detalle />} />
             <Route path="/perfil" element={<Perfil />} />
-            <Route path="/editar/:id" element={<Editar />} /> {/* Agrega esta línea */}
+            <Route path="/editar/:id" element={<Editar />} />
           </Routes>
         </main>
 

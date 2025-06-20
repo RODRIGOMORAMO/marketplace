@@ -1,32 +1,19 @@
-import { useContext, useEffect, useState } from "react"; 
+import { useContext } from "react";
 // ✅ Requerimiento 4: Uso del hook useContext
 
-import { UserContext } from "../context/UserContext"; 
+import { UserContext } from "../context/UserContext";
 // ✅ Requerimiento 5: Accedemos al estado global del usuario
 
-import { PublicacionesContext } from "../context/PublicacionesContext"; 
+import { PublicacionesContext } from "../context/PublicacionesContext";
 // ✅ Requerimiento 5: Accedemos al estado global de publicaciones
 
-import Card from "../components/Card"; 
+import Card from "../components/Card";
 // ✅ Requerimiento 3: Reutilizamos el componente Card
 import axios from "axios";
 
 const Perfil = () => {
   const { usuario } = useContext(UserContext); // Solo usuario, no setUsuario
   const { publicaciones, setPublicaciones } = useContext(PublicacionesContext);
-
-  const [usuarioState, setUsuarioState] = useState(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
-  });
-
-  useEffect(() => {
-    if (usuario) {
-      localStorage.setItem("usuario", JSON.stringify(usuario));
-    } else {
-      localStorage.removeItem("usuario");
-    }
-  }, [usuario]);
 
   if (!usuario) {
     return <p className="text-center">Debes iniciar sesión para ver tu perfil.</p>;
@@ -73,24 +60,18 @@ const Perfil = () => {
         <p>Aún no has creado publicaciones.</p>
       ) : (
         <div className="row">
-          {misPublicaciones.length === 0 ? (
-            <div className="col-12 text-center text-muted">
-              No hay publicaciones para mostrar.
-            </div>
-          ) : (
-            misPublicaciones
-              .filter((obra) => obra && obra.id) // Filtra elementos válidos
-              .map((obra) => (
-                <div className="col-md-4 mb-4" key={obra.id}>
-                  <Card
-                    obra={obra}
-                    usuario={usuario}
-                    setPublicaciones={setPublicaciones}
-                    onEliminar={handleEliminar}
-                  />
-                </div>
-              ))
-          )}
+          {misPublicaciones
+            .filter((obra) => obra && obra.id) // Filtra elementos válidos
+            .map((obra) => (
+              <div className="col-md-4 mb-4" key={obra.id}>
+                <Card
+                  obra={obra}
+                  usuario={usuario}
+                  setPublicaciones={setPublicaciones}
+                  onEliminar={handleEliminar}
+                />
+              </div>
+            ))}
         </div>
       )}
     </div>
