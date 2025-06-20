@@ -12,7 +12,7 @@ import Card from "../components/Card";
 import axios from "axios";
 
 const Perfil = () => {
-  const { usuario, setUsuario } = useContext(UserContext); // Accedemos al usuario actual
+  const { usuario } = useContext(UserContext); // Solo usuario, no setUsuario
   const { publicaciones, setPublicaciones } = useContext(PublicacionesContext);
 
   const [usuarioState, setUsuarioState] = useState(() => {
