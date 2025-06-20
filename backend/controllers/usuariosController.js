@@ -39,32 +39,34 @@ export const registrarUsuario = async (req, res) => {
 }
 
 export const loginUsuario = async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
+  // Busca el usuario por email
+  const usuario = await buscarUsuarioPorEmail(email); // tu función para buscar usuario
 
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  if (!usuario) {
+    return res.status(401).json({ error: "Usuario no encontrado" });
+  }
+
+  // Verifica que el password esté presente
+  if (!usuario.password) {
+    return res.status(500).json({ error: "El usuario no tiene contraseña registrada" });
+  }
+
+  // Compara la contraseña
+  const passwordValida = await bcrypt.compare(password, usuario.password);
+  if (!passwordValida) {
+    return res.status(401).json({ error: "Contraseña incorrecta" });
+  }
+
+  const token = generarToken(usuario);
+
+  res.status(200).json({
+    message: 'Usuario autenticado exitosamente',
+    token,
+    usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email
     }
-
-    const usuario = await buscarUsuarioPorEmail(email);
-    if (!usuario) {
-        return res.status(401).json({ error: 'Credenciales inválidas' });
-    }
-
-    // Aquí cambia usuario.password
-    const passwordValida = await bcrypt.compare(password, usuario.password);
-    if (!passwordValida) {
-        return res.status(401).json({ error: 'Contraseña incorrecta' });
-    }
-
-    const token = generarToken(usuario);
-
-    res.status(200).json({
-        message: 'Usuario autenticado exitosamente',
-        token,
-        usuario: {
-            id: usuario.id,
-            nombre: usuario.nombre,
-            email: usuario.email
-        }
-    });
+  });
 }
