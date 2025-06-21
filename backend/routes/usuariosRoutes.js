@@ -1,6 +1,7 @@
 // Define los endpoints
 import { Router } from 'express';
 import { registrarUsuario, loginUsuario } from '../controllers/usuariosController.js';
+import requireAuth from '../middlewares/requireAuth.js'; // Asegúrate de tener este middleware
 
 const router = Router();
 
@@ -18,6 +19,12 @@ router.post('/logout', (req, res) => {
     sameSite: 'Lax',
   });
   res.json({ message: "Sesión cerrada" });
+});
+
+// Ruta para obtener el usuario autenticado
+router.get('/perfil', requireAuth, (req, res) => {
+  // req.user fue agregado por el middleware requireAuth
+  res.json({ usuario: req.user });
 });
 
 export default router;
