@@ -14,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: "https://marketplacebjr.netlify.app", // tu frontend
+  origin: "https://marketplacebjr.netlify.app",
   credentials: true
 }));
 app.use(cookieParser()); // Habilita el uso de cookies

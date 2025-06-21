@@ -66,9 +66,9 @@ export const loginUsuario = async (req, res) => {
 
   res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // true solo en producción HTTPS
-    sameSite: 'Lax', // o 'Strict' para más seguridad
-    maxAge: 24 * 60 * 60 * 1000, // 1 día
+    secure: true,      // obligatorio para SameSite=None
+    sameSite: 'None',  // necesario para dominios distintos (Netlify y Render)
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   res.json({ message: "Login exitoso" });
