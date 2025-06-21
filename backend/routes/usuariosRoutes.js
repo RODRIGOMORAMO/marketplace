@@ -1,7 +1,6 @@
 // Define los endpoints
 import { Router } from 'express';
 import { registrarUsuario, loginUsuario } from '../controllers/usuariosController.js';
-import requireAuth from '../middlewares/requireAuth.js'; // Asegúrate de tener este middleware
 
 const router = Router();
 
@@ -10,21 +9,5 @@ router.post('/usuarios', registrarUsuario);
 
 // Ruta para iniciar sesión
 router.post('/login', loginUsuario);
-
-// Ruta para cerrar sesión (logout)
-router.post('/logout', (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax',
-  });
-  res.json({ message: "Sesión cerrada" });
-});
-
-// Ruta para obtener el usuario autenticado
-router.get('/perfil', requireAuth, (req, res) => {
-  // req.user fue agregado por el middleware requireAuth
-  res.json({ usuario: req.user });
-});
 
 export default router;

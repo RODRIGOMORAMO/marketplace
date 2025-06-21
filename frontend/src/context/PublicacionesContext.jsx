@@ -10,11 +10,8 @@ const PublicacionesProvider = ({ children }) => {
   useEffect(() => {
     const obtenerPublicaciones = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/publicaciones`,
-          { withCredentials: true }
-        );
-        setPublicaciones(res.data); // Ajusta según la respuesta de tu backend
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/publicaciones`);
+        setPublicaciones(res.data);
       } catch (error) {
         console.error("Error al obtener publicaciones desde API:", error);
       }
@@ -25,13 +22,18 @@ const PublicacionesProvider = ({ children }) => {
 
   // Agregar una nueva publicación enviándola al backend
   const agregarPublicacion = async (publicacion) => {
+    const token = localStorage.getItem("token"); // Recuperar el token almacenado
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/publicaciones`,
         publicacion,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Enviar el token en el encabezado
+          },
+        }
       );
-      setPublicaciones((prev) => [response.data, ...prev]);
+      console.log("Publicación agregada:", response.data);
     } catch (error) {
       console.error("Error al agregar publicación:", error);
     }

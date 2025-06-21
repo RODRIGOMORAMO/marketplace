@@ -58,18 +58,15 @@ export const loginUsuario = async (req, res) => {
     return res.status(401).json({ error: "Contraseña incorrecta" });
   }
 
-  const token = jwt.sign(
-    { id: usuario.id, email: usuario.email },
-    process.env.JWT_SECRET,
-    { expiresIn: '1d' }
-  );
+  const token = generarToken(usuario);
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: true,      // obligatorio para SameSite=None
-    sameSite: 'None',  // necesario para dominios distintos (Netlify y Render)
-    maxAge: 24 * 60 * 60 * 1000,
+  res.status(200).json({
+    message: 'Usuario autenticado exitosamente',
+    token,
+    usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email
+    }
   });
-
-  res.json({ message: "Login exitoso" });
-};
+}

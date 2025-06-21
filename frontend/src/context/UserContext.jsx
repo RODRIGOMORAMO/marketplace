@@ -1,4 +1,3 @@
-import axios from "axios";
 import { createContext, useState, useEffect } from "react";
 
 // 1. Crear el contexto
@@ -10,19 +9,37 @@ export const UserProvider = ({ children }) => {
 
   // Este efecto se ejecuta al cargar la app
   useEffect(() => {
-    // Consulta el usuario autenticado al cargar la app
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/perfil`, { withCredentials: true })
-      .then((res) => {
-        setUsuario(res.data.usuario);
-      })
-      .catch(() => {
-        setUsuario(null);
-      });
+    const usuarioGuardado = localStorage.getItem("usuario");
+    console.log("🟡 [UserProvider] usuario en localStorage:", usuarioGuardado);
+
+    if (usuarioGuardado) {
+      try {
+        const usuarioParseado = JSON.parse(usuarioGuardado);
+        console.log("🟢 [UserProvider] usuario parseado:", usuarioParseado);
+        setUsuario(usuarioParseado);
+      } catch (error) {
+        console.error("❌ Error al parsear usuario guardado:", error);
+        localStorage.removeItem("usuario");
+      }
+    }
   }, []);
 
+  const login = (usuario) => {
+    console.log("🔐 [login] Guardando usuario en contexto:", usuario);
+    setUsuario(usuario);
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    localStorage.setItem("token", usuario.token);
+  };
+
+  const logout = () => {
+    console.log("🚪 [logout] Cerrando sesión");
+    setUsuario(null);
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("token");
+  };
+
   return (
-    <UserContext.Provider value={{ usuario, setUsuario }}>
+    <UserContext.Provider value={{ usuario, login, logout }}>
       {children}
     </UserContext.Provider>
   );

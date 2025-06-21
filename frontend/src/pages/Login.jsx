@@ -16,14 +16,21 @@ const Login = () => {
     setError("");
 
     try {
-      await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/login`,
-        { email, password },
-        { withCredentials: true }
+        { email, password }
       );
-      // No guardes nada aquí, solo redirige
+      console.log("Respuesta login:", res.data);
+
+      // Guarda usuario + token en el contexto (y en localStorage)
+      login({
+        ...res.data.usuario,
+        token: res.data.token,
+      });
+
       navigate("/perfil");
     } catch (err) {
+      console.error("Error en login:", err.response?.data || err);
       setError(
         err.response?.data?.error || "Error al iniciar sesión. Intenta de nuevo."
       );
