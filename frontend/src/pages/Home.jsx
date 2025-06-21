@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <div>
       <div className="text-center py-4">
-        <h1 className="display-5 fw-bold">Bienvenid@ a Galería Creativa XXXXX</h1>
+        <h1 className="display-5 fw-bold">Bienvenid@ a Galería Creativa</h1>
         <p className="lead">Descubre, comparte y vende arte hecho con pasión.</p>
         <h1 className="text-center my-4">Explora Obras y Servicios Creativos</h1>
       </div>
