@@ -32,8 +32,6 @@ const CrearPublicacion = () => {
     setError("");
 
     try {
-      const token = localStorage.getItem("token");
-
       const nuevaPublicacion = {
         titulo,
         descripcion,
