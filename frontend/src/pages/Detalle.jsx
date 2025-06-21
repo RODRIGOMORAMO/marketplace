@@ -113,6 +113,17 @@ const Detalle = () => {
     }
   };
 
+  useEffect(() => {
+    const res = async () => {
+      const result = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/perfil`,
+        { withCredentials: true }
+      );
+      console.log(result.data.usuario);
+    };
+    res();
+  }, []);
+
   if (cargando) {
     return (
       <div className="text-center my-5">

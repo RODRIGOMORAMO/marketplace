@@ -25,5 +25,9 @@ router.post("/api/publicaciones", requireAuth, (req, res) => {
   // Lógica para manejar la creación de publicaciones
   res.status(201).json({ message: "Publicación creada exitosamente" });
 });
+router.get("/api/perfil", requireAuth, (req, res) => {
+  // req.user contiene los datos del usuario autenticado
+  res.json({ usuario: req.user });
+});
 
 export default router;

@@ -10,7 +10,11 @@ const PublicacionesProvider = ({ children }) => {
   useEffect(() => {
     const obtenerPublicaciones = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/publicaciones`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/perfil`,
+          { withCredentials: true }
+        );
+        console.log(res.data.usuario);
         setPublicaciones(res.data);
       } catch (error) {
         console.error("Error al obtener publicaciones desde API:", error);

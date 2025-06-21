@@ -5,6 +5,7 @@ import pool from './db/db.js';
 import usuariosRoutes from './routes/usuariosRoutes.js';
 import publicacionesRoutes from './routes/publicacionesRoutes.js';
 import mensajesRoutes from './routes/mensajesRouters.js';
+import cookieParser from 'cookie-parser';
 
 
 dotenv.config();
@@ -12,7 +13,11 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "https://marketplacebjr.netlify.app", // tu frontend
+  credentials: true
+}));
+app.use(cookieParser()); // Habilita el uso de cookies
 
 app.use('/api', usuariosRoutes);
 app.use('/api', publicacionesRoutes);
