@@ -112,11 +112,7 @@ const agregarPublicacion = async (nuevaPublicacion, token) => {
   }
 };
 
-await axios.post(
-  `${import.meta.env.VITE_API_URL}/api/login`,
-  { email, password },
-  { withCredentials: true }
-);
+
 
 
 
