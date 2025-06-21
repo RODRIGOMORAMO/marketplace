@@ -113,6 +113,25 @@ const Detalle = () => {
     }
   };
 
+  const manejarEdicion = async (e) => {
+    e.preventDefault();
+    setEstado("");
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/publicaciones/${id}`,
+        publicacion,
+        { withCredentials: true }
+      );
+      setPublicaciones((prev) =>
+        prev.map((pub) => (pub.id === res.data.id ? res.data : pub))
+      );
+      setEstado("Publicación actualizada correctamente.");
+      navigate(`/detalle/${id}`);
+    } catch (error) {
+      setEstado("Error al editar la publicación.");
+    }
+  };
+
   useEffect(() => {
     const res = async () => {
       const result = await axios.get(

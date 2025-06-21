@@ -42,11 +42,7 @@ const Editar = () => {
       const res = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/publicaciones/${id}`,
         publicacion,
-        {
-          headers: {
-            Authorization: `Bearer ${usuario.token}`,
-          },
-        }
+        { withCredentials: true }
       );
       setPublicaciones((prev) =>
         prev.map((pub) => (pub.id === res.data.id ? res.data : pub))
@@ -54,7 +50,6 @@ const Editar = () => {
       setEstado("Publicación actualizada correctamente.");
       navigate(`/detalle/${id}`); // Redirige al detalle de la publicación
     } catch (error) {
-      console.error("Error al editar la publicación:", error);
       setEstado("Error al editar la publicación.");
     }
   };

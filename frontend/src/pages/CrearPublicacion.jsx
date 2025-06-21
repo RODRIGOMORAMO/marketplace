@@ -34,20 +34,18 @@ const CrearPublicacion = () => {
     try {
       const token = localStorage.getItem("token");
 
+      const nuevaPublicacion = {
+        titulo,
+        descripcion,
+        categoria_id: categoriaId,
+        imagen_url: imagen,
+        precio: Number(precio),
+      };
+
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/publicaciones`,
-        {
-          titulo,
-          descripcion,
-          categoria_id: categoriaId,
-          imagen_url: imagen,
-          precio: Number(precio),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        nuevaPublicacion,
+        { withCredentials: true }
       );
 
       setPublicaciones((prev) => [res.data, ...prev]);
@@ -60,6 +58,25 @@ const CrearPublicacion = () => {
       navigate("/");
     } catch (err) {
       setError("Error al crear la publicación");
+    }
+  };
+
+  const manejarEdicion = async (e) => {
+    e.preventDefault();
+    setEstado("");
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/publicaciones/${id}`,
+        publicacion,
+        { withCredentials: true }
+      );
+      setPublicaciones((prev) =>
+        prev.map((pub) => (pub.id === res.data.id ? res.data : pub))
+      );
+      setEstado("Publicación actualizada correctamente.");
+      navigate(`/detalle/${id}`);
+    } catch (error) {
+      setEstado("Error al editar la publicación.");
     }
   };
 
