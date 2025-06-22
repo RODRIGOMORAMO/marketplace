@@ -63,7 +63,7 @@ const Login = () => {
             />
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn btn-dark w-100">
             Ingresar
           </button>
         </form>
@@ -73,3 +73,4 @@ const Login = () => {
 };
 
 export default Login;
+
